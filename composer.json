@@ -1,7 +1,7 @@
 {
     "name": "akilliasistan",
     "description": "akbank_akilli_asistan",
-    "homepage": "none",
+    "homepage": "http://www.pieorpi.com",
     "type": "project",
     "license": "MIT",
     "require": {
