@@ -13,6 +13,15 @@ use App\Conversations\SettingConversation;
  */
 class ChatController extends AppController
 {
+	/**
+	 * { function_description }
+	 */
+	public function test()
+	{
+		echo phpinfo();
+		die();
+	}
+
 	public function index()
 	{
 
