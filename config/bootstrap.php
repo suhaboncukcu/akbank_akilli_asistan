@@ -215,3 +215,7 @@ Type::build('timestamp')
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
+
+
+// load custom configurations
+Configure::load('akbank', 'default', false);

@@ -29,9 +29,7 @@ class ChatController extends AppController
 
 		DriverManager::loadDriver(\BotMan\Drivers\Web\WebDriver::class);
 
-		$config = [
-		   
-		];
+		$config = [];
 		
 		$botman = BotManFactory::create($config, new RedisCache('127.0.0.1', 6379));
 		
