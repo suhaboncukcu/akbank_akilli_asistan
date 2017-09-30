@@ -17,13 +17,31 @@ class SettingConversation extends Conversation
 	
 	public function askForCategories()
 	{
-		$categoriesQuestion = $this->getCategoriesQuestion();
+		if(!$categoriesQuestion = $this->getCategoriesQuestion()) {
+			$this->say(json_encode(['message' => 'Teşekkürler Süha, bütün cevaplarını elimde görünüyor. Uygulamayı kullanmaya devam edebilirsin. ']));
+			return true;
+		}
 
 		$this->ask(json_encode($categoriesQuestion, TRUE), function(IncomingAnswer $answer) {
 
             $choosenCategory = $answer->getText();
 
-            $this->askSavingAmount($choosenCategory);
+            $UserSavingAmount = TableRegistry::get('UserSavingAmounts');
+            $userSavingAmounts = $UserSavingAmount->find('all')
+            										->where(['category' => $choosenCategory])
+            										->where(function ($exp, $q) {
+														return $exp->isNull('amount');
+													})
+            										->all();
+
+            
+
+            if(count($userSavingAmounts) > 0) {
+            	$this->askSavingAmount($choosenCategory);
+            } else {
+            	$this->say(json_encode(['message' => 'Böyle bir kategori bulamadım Süha. Tekrar denemek ister misin?']));
+            	$this->askForCategories();
+            }
 
         });
 	}
@@ -146,14 +164,17 @@ class SettingConversation extends Conversation
 														return $exp->isNull('amount');
 													})->all();
 
-
 		$buttons = $categories->toArray();
 
+		if(count($buttons) > 0) {
+			return [
+				'message' => 'Aşağıdaki kategoriler için ne kadar harcamayı düşünüyorsun?',
+				'buttons' => $buttons
+			]; 	
+		}
 
-		return [
-			'message' => 'Aşağıdaki kategoriler için ne kadar harcamayı düşünüyorsun?',
-			'buttons' => $buttons
-		]; 
+		return false;
+		
 	}
 
 	public function run()
