@@ -7,21 +7,21 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Locations Model
+ * UserSavingAmounts Model
  *
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  *
- * @method \App\Model\Entity\Location get($primaryKey, $options = [])
- * @method \App\Model\Entity\Location newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Location[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Location|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Location patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Location[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Location findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\UserSavingAmount get($primaryKey, $options = [])
+ * @method \App\Model\Entity\UserSavingAmount newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\UserSavingAmount[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\UserSavingAmount|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\UserSavingAmount patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\UserSavingAmount[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\UserSavingAmount findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class LocationsTable extends Table
+class UserSavingAmountsTable extends Table
 {
 
     /**
@@ -34,18 +34,16 @@ class LocationsTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('locations');
+        $this->setTable('user_saving_amounts');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
-        
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
-        
     }
 
     /**
@@ -61,14 +59,17 @@ class LocationsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->numeric('lat')
-            ->requirePresence('lat', 'create')
-            ->notEmpty('lat');
+            ->scalar('category')
+            ->requirePresence('category', 'create')
+            ->notEmpty('category');
 
         $validator
-            ->numeric('lng')
-            ->requirePresence('lng', 'create')
-            ->notEmpty('lng');
+            ->numeric('amount')
+            ->allowEmpty('amount');
+
+        $validator
+            ->scalar('visible_name')
+            ->allowEmpty('visible_name');
 
         return $validator;
     }

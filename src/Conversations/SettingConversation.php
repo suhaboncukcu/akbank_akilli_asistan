@@ -7,6 +7,7 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer as IncomingAnswer;
 
 use Cake\Log\Log;
+use Cake\ORM\TableRegistry;
 
 /**
 * 
@@ -18,7 +19,7 @@ class SettingConversation extends Conversation
 	{
 		$categoriesQuestion = $this->getCategoriesQuestion();
 
-		$this->ask(json_encode($categoriesQuestion), function(IncomingAnswer $answer) {
+		$this->ask(json_encode($categoriesQuestion, TRUE), function(IncomingAnswer $answer) {
 
             $choosenCategory = $answer->getText();
 
@@ -31,20 +32,36 @@ class SettingConversation extends Conversation
 	{
 		$categoryAnswer = $this->getCategoryAnswer($choosenCategory);
 
-		$this->ask(json_encode($categoryAnswer), [
-	        [
-	            'pattern' => '100|200|300|500|1000',
-	            'callback' => function () {
-	                $this->say(json_encode(['message' => 'Teşekkürler Süha, cevabını kaydettim.']));
-	            }
-	        ],
-	        [
-	            'pattern' => 'more',
-	            'callback' => function () {
-	                $this->askSpecificSavingAmout($choosenCategory);
-	            }
-	        ]
-	    ]);
+
+		$this->ask(json_encode($categoryAnswer), function(IncomingAnswer $answer) use ($choosenCategory) {
+
+            $amountAnswer = $answer->getText();
+
+            $this->saveAmountToCategory($choosenCategory, $amountAnswer);
+
+        });
+
+	}
+
+	public function saveAmountToCategory($choosenCategory, $amountAnswer)
+	{
+		if($amountAnswer == 'more') {
+			$this->askSpecificSavingAmout($choosenCategory);
+		} else {
+			$UserSavingAmount = TableRegistry::get('UserSavingAmounts');
+			
+			$userSavingAmount = $UserSavingAmount->find('all')->where([
+				'category' => $choosenCategory
+			])->first();
+
+			$UserSavingAmount->patchEntity($userSavingAmount, [
+				'amount' => $amountAnswer
+			]);
+
+			$UserSavingAmount->save($userSavingAmount);
+			
+			$this->continueConversation();
+		}
 	}
 
 	public function askSpecificSavingAmout($choosenCategory)
@@ -52,19 +69,50 @@ class SettingConversation extends Conversation
 		$question = [
 			'message' => 'Pekala Süha, kaç TL harcamak istiyorsun? (Ör 130, 130TL demektir.)'
 		];
-		$this->ask(json_encode($question), function(IncomingAnswer $answer) {
-			$this->say(['message' => 'Teşekkürler Süha, cevabını kaydettim.']);
+
+		$this->ask(json_encode($question), function(IncomingAnswer $answer) use ($choosenCategory) {
+			
+			$this->saveAmountToCategory($choosenCategory, $answer->getText());
+
+			$this->continueConversation();
 		});
 	}
 
-	public function getCategoryAnswer($choosenCategory)
+	public function continueConversation()
 	{
-		$responseMap = [
-			'giyecek' => 'Geçtiğimiz aylarda giyecek için ortalama 200TL harcamışsın. Bu ay ne kadar harcamayı düşünüyorsun?',
-			'yiyecek' => 'Geçtiğimiz aylarda yiyecek için ortalama 420TL harcamışsın. Bu ay ne kadar harcamayı düşünüyorsun?',
-			'teknoloji' => 'Geçtiğimiz aylarda teknoloji için ortalama 360TL harcamışsın. Bu ay ne kadar harcamayı düşünüyorsun?', 
-			'akaryakit' => 'Geçtiğimiz aylarda akaryakıt için ortalama 330TL harcamışsın. Bu ay ne kadar harcamayı düşünüyorsun?'
-		];
+		$UserSavingAmount = TableRegistry::get('UserSavingAmounts');
+		$categories = $UserSavingAmount->find('all')->select([
+													    'name' => 'visible_name',
+													    'key' => 'category'
+													])->where(function ($exp, $q) {
+														return $exp->isNull('amount');
+													})->all();
+		if (count($categories) > 0) {
+			// $this->say(json_encode(['message' => 'Teşekkürler Süha, cevabını kaydettim lütfen devam et.']));
+			$this->askForCategories();
+		} else {
+			$this->say(json_encode(['message' => 'Teşekkürler Süha, bütün cevaplarını kaydettim. Şimdi uygulamayı kapatıp akıllı hayata başlayabilirsin!']));
+			return true;
+		}
+
+		
+	}
+
+	public function stopConversation(Message $message)
+	{
+		if ($message->getMessage() == 'bitir') {
+			return true;
+		}
+
+		return false;
+	}
+
+	private function getCategoryAnswer($choosenCategory)
+	{
+		$UserSavingAmount = TableRegistry::get('UserSavingAmounts');
+		$question = $UserSavingAmount->find('all')->where(['category' => $choosenCategory])->first();
+		Log::debug($question);
+
 
 		$buttons = [
 			['name' => '100 TL' , 'key' => '100'],
@@ -76,7 +124,7 @@ class SettingConversation extends Conversation
 		];
 
 		return [
-			'message' => $responseMap[$choosenCategory],
+			'message' => $question->last_month_question,
 			'buttons' => $buttons
 		];
 	}
@@ -89,26 +137,22 @@ class SettingConversation extends Conversation
 		
 		//  Mock for now since api doesn't respond with proper results. 
 		
+		$UserSavingAmount = TableRegistry::get('UserSavingAmounts');
+
+		$categories = $UserSavingAmount->find('all')->select([
+													    'name' => 'visible_name',
+													    'key' => 'category'
+													])->where(function ($exp, $q) {
+														return $exp->isNull('amount');
+													})->all();
+
+
+		$buttons = $categories->toArray();
+
+
 		return [
-			'message' => 'Merhaba Süha, bu ay aşağıdaki kategoriler için ne kadar harcamayı düşünüyorsun?',
-			'buttons' => [
-				[
-					'name' => 'Giyecek',
-					'key' => 'giyecek'
-				],
-				[
-					'name' => 'Yiyecek',
-					'key' => 'yiyecek'
-				],
-				[
-					'name' => 'Teknoloji',
-					'key' => 'teknoloji'
-				],
-				[
-					'name' => 'Akaryakıt',
-					'key' => 'akaryakit'
-				]
-			]
+			'message' => 'Aşağıdaki kategoriler için ne kadar harcamayı düşünüyorsun?',
+			'buttons' => $buttons
 		]; 
 	}
 

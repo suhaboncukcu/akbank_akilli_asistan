@@ -18,7 +18,22 @@ class ChatController extends AppController
 	 */
 	public function test()
 	{
-		echo phpinfo();
+		$this->autoRender = false;
+
+		DriverManager::loadDriver(\BotMan\Drivers\Web\WebDriver::class);
+
+		$config = [];
+		
+		$botman = BotManFactory::create($config, new RedisCache('127.0.0.1', 6379));
+		
+
+		$botman->fallback(function(BotMan $bot) {
+		    $bot->reply('TEST CODE');
+		});
+
+		// start listening
+		$botman->listen();
+
 		die();
 	}
 
@@ -40,7 +55,7 @@ class ChatController extends AppController
 		});
 
 		$botman->fallback(function(BotMan $bot) {
-		    $bot->reply('ÜZügnüm, ne dediğini anlayamadım.');
+		    $bot->reply(json_encode(['message' => 'Üzgünüm, ne dediğini anlayamadım.']));
 		});
 
 		// start listening
