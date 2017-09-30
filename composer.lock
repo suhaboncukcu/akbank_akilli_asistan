@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a30c446493c8a4d574f200e520dc586d",
-    "content-hash": "7bf61bfee19100d294634b2e674d91f8",
+    "hash": "f5af7a79f3984ae6a4b592889dc5212b",
+    "content-hash": "5932f55d0a7e647095411ff0262ddd63",
     "packages": [
         {
             "name": "aura/intl",
@@ -658,6 +658,52 @@
                 "support"
             ],
             "time": "2016-10-06 19:31:28"
+        },
+        {
+            "name": "mills/google-places",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anthony-mills/google-places.git",
+                "reference": "073dfd6de2acbc2ff06b48ea6c9a320e04915095"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anthony-mills/google-places/zipball/073dfd6de2acbc2ff06b48ea6c9a320e04915095",
+                "reference": "073dfd6de2acbc2ff06b48ea6c9a320e04915095",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/mills/google-places"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLV2"
+            ],
+            "authors": [
+                {
+                    "name": "Anthony Mills",
+                    "email": "me@anthony-mills.com",
+                    "homepage": "http://www.anthony-mills.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP wrapper Google Places API",
+            "homepage": "https://github.com/anthony-mills/google-places",
+            "keywords": [
+                "api",
+                "geolocation",
+                "googleplaces",
+                "locate",
+                "places"
+            ],
+            "time": "2017-01-11 03:32:47"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

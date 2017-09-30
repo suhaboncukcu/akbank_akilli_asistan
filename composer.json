@@ -13,7 +13,7 @@
         "josegonzalez/dotenv": "2.*",
         "botman/botman": "^2.0",
         "botman/driver-web": "^1.0",
-        "guzzle/guzzle": "^3.9"
+        "mills/google-places": "^1.0"
     },
     "require-dev": {
         "psy/psysh": "@stable",

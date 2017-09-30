@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller\Component;
 
-use App\Akbank\Api;
+use App\Logic\Akbank\Api;
 
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;

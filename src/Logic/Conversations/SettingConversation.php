@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Conversations;
+namespace App\Logic\Conversations;
 
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer as IncomingAnswer;

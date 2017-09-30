@@ -1,5 +1,5 @@
 <?php
-namespace App\Akbank;
+namespace App\Logic\Akbank;
 
 use Cake\Core\Configure;
 use Cake\Http\Client;

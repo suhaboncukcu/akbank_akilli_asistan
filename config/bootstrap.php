@@ -219,3 +219,10 @@ if (Configure::read('debug')) {
 
 // load custom configurations
 Configure::load('akbank', 'default', false);
+Configure::load('pushover', 'default', false);
+Configure::load('places', 'default', false);
+
+
+if(env('ENVIRONMENT') == 'local') {
+    Configure::write('pushover.DEVICE', env('PUSHOVER_DEVICE_NAME'));
+}

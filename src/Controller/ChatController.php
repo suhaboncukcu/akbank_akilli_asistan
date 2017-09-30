@@ -7,7 +7,10 @@ use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 
 use BotMan\BotMan\Cache\RedisCache;
-use App\Conversations\SettingConversation;
+use App\Logic\Conversations\SettingConversation;
+use App\Logic\Pushover\Api;
+use App\Logic\Places\Api as PlacesApi;
+
 
 /**
  */
@@ -17,6 +20,16 @@ class ChatController extends AppController
 	{
 		$this->loadComponent('Akbank');
 		$this->Akbank->mockAllApis();
+
+		$pushoverApi = new Api();
+		$respond = $pushoverApi->test();
+		dump($respond);
+
+
+		$placesApi = new PlacesApi();
+		$results = $placesApi->test('41.085401', '29.010857');
+		dump($results);
+
 
 		die();
 	}
