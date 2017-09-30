@@ -2,7 +2,6 @@
 
 namespace App\Conversations;
 
-use App\Akbank\Api;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer as IncomingAnswer;
 
@@ -149,11 +148,8 @@ class SettingConversation extends Conversation
 
 	private function getCategoriesQuestion()
 	{
-		// $akApi = new Api();
-		// $accountActions = $akApi->getAccountActions();
-		// $categoriesQuestion = $accountActions->body;
 		
-		//  Mock for now since api doesn't respond with proper results. 
+		//  Mock API for now since api doesn't respond with proper results. 
 		
 		$UserSavingAmount = TableRegistry::get('UserSavingAmounts');
 

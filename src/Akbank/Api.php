@@ -46,4 +46,75 @@ class Api
 
 		return $response;
 	}
+
+	/**
+	 * Gets the account balance.
+	 *
+	 * @return     Client  The account balance.
+	 */
+	public function getAccountBalance()
+	{
+		$http = new Client();
+		$response = $http->get($this->root . '/accountbalance?customerid=3434', [], [
+			'auth' => ['username' => $this->username, 'password' => $this->password]
+		]);
+
+		return $response;
+	}
+
+	/**
+	 * Gets the credit card movements.
+	 *
+	 * @return     Client  The credit card movements.
+	 */
+	public function getCreditCardMovements()
+	{
+		$http = new Client();
+		$response = $http->get($this->root . '/creditCardMovements?cardNo=2222', [], [
+			'auth' => ['username' => $this->username, 'password' => $this->password]
+		]);
+
+		return $response;
+	}
+
+	/**
+	 * Gets the credit debt display.
+	 *
+	 * @return     Client  The credit debt display.
+	 */
+	public function getCreditDebtDisplay()
+	{
+		$http = new Client();
+		$response = $http->get($this->root . '/creditdebtdisplay?customerid=123456', [], [
+			'auth' => ['username' => $this->username, 'password' => $this->password]
+		]);
+
+		return $response;
+	}
+
+	/**
+	 * Creates a credit application.
+	 *
+	 * @return     <type>  ( description_of_the_return_value )
+	 */
+	public function createCreditApplication()
+	{
+
+		$requestLoad = [
+			"phoneNumber" => "05555555555",
+			"identityNumber" => "99999999999",
+			"name" => "test",
+			"surname" => "test"
+		];
+
+
+		$http = new Client();
+		$response = $http->post($this->root . '/creditApplication', json_encode($requestLoad, TRUE), [
+			'auth' => ['username' => $this->username, 'password' => $this->password],
+			'type' => 'json',
+			['headers' => ['Content-Type' => 'application/json']]
+		]);
+
+		return $response;
+	}
 }

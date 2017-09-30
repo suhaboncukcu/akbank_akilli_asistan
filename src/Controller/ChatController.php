@@ -13,6 +13,14 @@ use App\Conversations\SettingConversation;
  */
 class ChatController extends AppController
 {
+	public function mock()
+	{
+		$this->loadComponent('Akbank');
+		$this->Akbank->mockAllApis();
+
+		die();
+	}
+
 	/**
 	 * { function_description }
 	 */
@@ -25,7 +33,6 @@ class ChatController extends AppController
 		$config = [];
 		
 		$botman = BotManFactory::create($config, new RedisCache('127.0.0.1', 6379));
-		
 
 		$botman->fallback(function(BotMan $bot) {
 		    $bot->reply('TEST CODE');
