@@ -13,6 +13,12 @@ use App\Controller\AppController;
 class BadgesController extends AppController
 {
 
+    public function iniialize()
+    {
+        parent::initialize();
+        $this->response->header('Access-Control-Allow-Origin', '*');
+    }
+
     /**
      * Index method
      *
