@@ -16,7 +16,10 @@ class BadgesController extends AppController
     public function iniialize()
     {
         parent::initialize();
-        $this->response->header('Access-Control-Allow-Origin', '*');
+        $this->response->cors($this->request)
+        ->allowOrigin(['*'])
+        ->allowMethods(['GET', 'POST'])
+        ->build();
     }
 
     /**
