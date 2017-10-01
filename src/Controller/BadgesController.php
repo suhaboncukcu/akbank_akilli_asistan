@@ -13,14 +13,17 @@ use App\Controller\AppController;
 class BadgesController extends AppController
 {
 
-    public function beforeFilter()
+    public function iniialize()
     {
-        parent::beforeFilter();
-        $this->response->header('Access-Control-Allow-Origin','*');
-        $this->response->header('Access-Control-Allow-Methods','*');
-        $this->response->header('Access-Control-Allow-Headers','X-Requested-With');
-        $this->response->header('Access-Control-Allow-Headers','Content-Type, x-xsrf-token');
-        $this->response->header('Access-Control-Max-Age','172800');
+        parent::initialize();
+        $this->response->cors($this->request)
+        ->allowOrigin(['*'])
+        ->allowMethods(['GET', 'POST'])
+        ->allowHeaders(['X-CSRF-Token'])
+        ->allowCredentials()
+        ->exposeHeaders(['Link'])
+        ->maxAge(300)
+        ->build();
     }
 
     /**
