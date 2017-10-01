@@ -20,6 +20,7 @@ class BadgesController extends AppController
      */
     public function index()
     {
+        header('Access-Control-Allow-Origin: *');  
         $this->autoRender = false;
         $badges = $this->Badges->find('all')->order(['css_class' => 'ASC']);
         $bdgs = json_encode($badges->toArray());
