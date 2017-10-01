@@ -13,19 +13,6 @@ use App\Controller\AppController;
 class BadgesController extends AppController
 {
 
-    public function iniialize()
-    {
-        parent::initialize();
-        $this->response->cors($this->request)
-        ->allowOrigin(['*'])
-        ->allowMethods(['GET', 'POST'])
-        ->allowHeaders(['X-CSRF-Token'])
-        ->allowCredentials()
-        ->exposeHeaders(['Link'])
-        ->maxAge(300)
-        ->build();
-    }
-
     /**
      * Index method
      *
