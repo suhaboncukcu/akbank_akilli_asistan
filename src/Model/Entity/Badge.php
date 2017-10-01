@@ -50,6 +50,6 @@ class Badge extends Entity
      */
     public function _getImg($img)
     {
-        return '/img/' . $img;
+        return 'http://pieorpi.com/img/' . $img;
     }
 }
