@@ -16,6 +16,20 @@ use App\Logic\Places\Api as PlacesApi;
  */
 class ChatController extends AppController
 {
+
+	public function reset()
+	{
+		$this->loadModel('UserSavingAmounts');
+
+		$query = $this->UserSavingAmounts->query();
+		$query->update()
+	    ->set(['amount' => NULL])
+	    ->execute();
+
+	    echo "ok"; 
+	    die();
+	}
+
 	public function mock()
 	{
 		$this->loadComponent('Akbank');

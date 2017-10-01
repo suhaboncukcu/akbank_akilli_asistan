@@ -21,7 +21,7 @@ class BadgesSeed extends AbstractSeed
         $data = [
             [
                 'id' => '1',
-                'name' => 'briefcase',
+                'name' => 'Briefcase',
                 'css_class' => '',
                 'img' => 'briefcase.png',
                 'created' => '2017-01-01 01:01:01',
