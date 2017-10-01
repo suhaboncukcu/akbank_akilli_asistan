@@ -20,9 +20,10 @@ class BadgesController extends AppController
      */
     public function index()
     {
+        $this->autoRender = false;
         $badges = $this->Badges->find('all')->order(['css_class' => 'ASC']);
-        $this->set(compact('badges'));
-        $this->set('_serialize', ['badges']);
+        $bdgs = json_encode($badges->toArray());
+        $this->response->body($bdgs);
     }
 
     /**
